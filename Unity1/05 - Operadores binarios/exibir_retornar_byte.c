@@ -3,7 +3,7 @@
 #include <string.h>
 
 // Prof: Bruno Monteiro
-// Objetivo: exibir um byte como uma string
+// Objetivo: exibir e retornar um byte como uma string
 
 
 char* exibirByte(char byte)
