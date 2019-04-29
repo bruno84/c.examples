@@ -1,0 +1,18 @@
+
+r	Abre o arquivo SOMENTE para leitura. 
+	O arquivo deve existir. Não cria novo arquivo.
+
+r+	Abre o arquivo para leitura e escrita. 
+	O arquivo deve existir. Não cria novo arquivo.
+
+w	Abre o arquivo SOMENTE para escrita no início do arquivo. 
+	Apagará o conteúdo do arquivo se ele já existir, ou criará um arquivo novo se não existir.
+
+w+	Abre o arquivo para leitura e escrita.
+	Apagará o conteúdo do arquivo se ele já existir, ou criará um arquivo novo se não existir.
+
+a	"append". Abre o arquivo SOMENTE para escrita no final do arquivo. 
+	Não apaga o conteúdo pré-existente. Criará um arquivo novo se não existir. 
+
+a+	Abre o arquivo para leitura; e escrita no final do arquivo. 
+	Não apaga o conteúdo pré-existente. Criará um arquivo novo se não existir. 
