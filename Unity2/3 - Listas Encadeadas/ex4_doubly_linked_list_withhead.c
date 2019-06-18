@@ -3,18 +3,18 @@
 #include <string.h>
 
 // Autor: Bruno Monteiro
-// Objetivo: Lista duplamente encadeada com elemento cabeça
+// Objetivo: Lista duplamente encadeada com elemento cabeÃ§a
 
 // Tipo do Elemento
 typedef struct sElemento {
 	int id;		    // ID
     char nome[30];	// Nome
     struct sElemento* pAnte;	// Ponteiro para elemento anterior
-    struct sElemento* pProx;	// Ponteiro para elemento próximo
+    struct sElemento* pProx;	// Ponteiro para elemento prÃ³ximo
 } tElemento;
 
 
-// Assinaturas das funções: (DICA: implementar nessa ordem facilita)
+// Assinaturas das funÃ§Ãµes: (DICA: implementar nessa ordem facilita)
 tElemento* inicializarLista();
 int inserirInicio(tElemento* inicio, char* nome);
 int percorrer(tElemento* inicio);
@@ -24,19 +24,6 @@ void inserirDepoisDe(tElemento* pInicio, char* nome, int key);
 tElemento* remover(tElemento* inicio, int key);
 
 
-tElemento* inicializarLista()
-{
-	// Aloca espaço para elemento CABEÇA
-	tElemento* pNovo = (tElemento*) calloc( 1, sizeof(tElemento) );
-    // Inicializa campos do elemento
-	pNovo->id = 1;
-    strcpy(pNovo->nome, "");
-    pNovo->pAnte = NULL;
-    pNovo->pProx = NULL;
-    
-    return pNovo;
-}
-
 tElemento* criarNovo(tElemento* pInicio, char* nome)
 {
 	tElemento *p = (tElemento*) calloc( 1, sizeof(tElemento) );
@@ -45,15 +32,29 @@ tElemento* criarNovo(tElemento* pInicio, char* nome)
 	p->pAnte = NULL;
     p->pProx = NULL;
     
-    // Atualiza elemento cabeça
+    // Atualiza elemento cabeÃ§a
     pInicio->id = pInicio->id + 1;
     
     return p;
 }
 
+
+tElemento* inicializarLista()
+{
+    // Aloca espaÃ§o para elemento NOVO
+    tElemento *p = (tElemento*) calloc( 1, sizeof(tElemento) );
+	p->id = 1;
+	strcpy(p->nome, "");
+	p->pAnte = NULL;
+    p->pProx = NULL;
+    
+    return p;
+}
+
+
 int inserirInicio(tElemento* pInicio, char* nome)
 {
-    // Aloca espaço para elemento NOVO
+    // Aloca espaÃ§o para elemento NOVO
     tElemento *pNovo = criarNovo(pInicio, nome);
     
     // Anexar
@@ -77,11 +78,11 @@ int inserirInicio(tElemento* pInicio, char* nome)
 
 int percorrer(tElemento* inicio)
 {
-	// Inicializações
+	// InicializaÃ§Ãµes
     int i = 0;						// Quantidade de elementos
-    tElemento* p = inicio->pProx; 	// Ponteiro temporario. Pulo o elemento cabeça.
+    tElemento* p = inicio->pProx; 	// Ponteiro temporario. Pulo o elemento cabeÃ§a.
 
-	// verifica se lista está vazia
+	// verifica se lista estÃ¡ vazia
     if(p == NULL) {
         printf("Lista Vazia!!! \n");
 		return 0;
@@ -97,7 +98,7 @@ int percorrer(tElemento* inicio)
         printf("p = %d \n", p);
         printf("pAnte = %d \n", p->pAnte);
         printf("pProx = %d \n\n", p->pProx);
-        p = p->pProx; // vai para o próximo elemento
+        p = p->pProx; // vai para o prÃ³ximo elemento
     }
 
 	printf("Quantidade de Elementos = %d \n", i);
@@ -105,18 +106,18 @@ int percorrer(tElemento* inicio)
 }
 
 
-tElemento* buscar(tElemento* inicio, int key)
+tElemento* buscar(tElemento* inicio, int keyID)
 {
-	// Inicializações
-    tElemento* p = inicio->pProx;	// Ponteiro temporario. Pulo a cabeça da lista. 
+	// InicializaÃ§Ãµes
+    tElemento* p = inicio->pProx;	// Ponteiro temporario. Pulo a cabeÃ§a da lista. 
     
-    while(p != NULL) 	// verifica se já chegou no final da lista
+    while(p != NULL) 	// verifica se jÃ¡ chegou no final da lista
     {
-        if(p->id == key) {
+        if(p->id == keyID) {
             return p;
         }
 
-        p = p->pProx; // vai para o próximo elemento
+        p = p->pProx; // vai para o prÃ³ximo elemento
     }
 
     return NULL;
@@ -125,24 +126,25 @@ tElemento* buscar(tElemento* inicio, int key)
 
 int inserirFim(tElemento* pInicio, char* nome)
 {
-	// Aloca espaço para elemento NOVO
+	// Aloca espaÃ§o para elemento NOVO
     tElemento *pNovo = criarNovo(pInicio, nome);
-
-	// Ultimo elemento
+    
     tElemento *pUltimo = pInicio->pAnte;
-
-    if(pUltimo == NULL) {
-    	// Cenario: lista vazia
-        pUltimo = pInicio;
-    }
     
     // Anexa elemento NOVO
-    pNovo->pAnte = pUltimo;
-	pNovo->pProx = NULL;
+    if(pUltimo == NULL) 
+	{
+    	// Cenario: lista vazia
+        pNovo->pAnte = pInicio;
+        pInicio->pProx = pNovo;
+    }
+    else 
+	{
+    	pNovo->pAnte = pUltimo;
+    	pUltimo->pProx = pNovo;
+	}
 
-    pUltimo->pProx = pNovo;
-
-    // Atualiza elemento CABEÇA
+    // Atualiza elemento CABEÃ‡A
     pInicio->pAnte = pNovo;
 }
 
@@ -155,34 +157,26 @@ void inserirDepoisDe(tElemento* pInicio, char* nomeNovo, int key)
 	if(p == NULL)  // Verifica se o criterio existe
 	{
         printf("Criterio invalido \n");
+        return;
 	}
-	else
-	{
-        // Aloca espaço para elemento NOVO
-    	tElemento* pNovo = (tElemento*) calloc( 1, sizeof(tElemento));
-    	pNovo->id = pInicio->id;
-    	strcpy(pNovo->nome, nomeNovo);
-        pNovo->pAnte = NULL;
-        pNovo->pProx = NULL;
+
+    // Aloca espaÃ§o para elemento NOVO
+	tElemento* pNovo = criarNovo(pInicio, nomeNovo);
+
+	// Anexa elemento NOVO (dica: comece atribuindo os campos NULL)
+	pNovo->pProx = p->pProx;
+	pNovo->pAnte = p;
+
+	// OBS: ponteiro  segundo  faz backup de  p->pProx
+    tElemento *pDireita = p->pProx;
+    p->pProx = pNovo;
     
-    	// Atualiza elemento CABEÇA (incrementa o próximo valor do ID)
-        pInicio->id = pInicio->id + 1;
-
-		// Anexa elemento NOVO (dica: comece atribuindo os campos NULL)
-    	pNovo->pProx = p->pProx;
-		pNovo->pAnte = p;
-
-		// OBS: ponteiro  segundo  faz backup de  p->pProx
-	    tElemento *pSegundo = p->pProx;
-	    p->pProx = pNovo;
-	    
-	    if(pSegundo != NULL) {
-	        pSegundo->pAnte = pNovo;
-	    }
-        else {
-            pInicio->pAnte = pNovo;   // Atualizo o ponteiro para o ultimo elemento
-        }
-	}
+    if(pDireita != NULL) {
+        pDireita->pAnte = pNovo;
+    }
+    else {
+        pInicio->pAnte = pNovo;   // Atualizo o ponteiro para o ultimo elemento
+    }
 }
 
 
@@ -192,28 +186,27 @@ tElemento* remover(tElemento* pInicio, int key)
     
     if(p == NULL) {
         printf("ID nao encontrado \n");
+        return NULL;
     }
-    else
-    {
-        // Faz backup dos elementos ao redor de P
-        tElemento* pEsquerda = p->pAnte;
-        tElemento* pDireita  = p->pProx;            
-        
-        // Anexar
-        pEsquerda->pProx = pDireita;
+
+    // Faz backup dos elementos ao redor de P
+    tElemento* pEsquerda = p->pAnte;
+    tElemento* pDireita  = p->pProx;            
     
-        // Verifica se é o último elemento, pra evitar NULL
-        if(pDireita != NULL) {
-            pDireita->pAnte = pEsquerda;
-        }
-        else {
-            pInicio->pAnte = pEsquerda; // Atualizo o ponteiro para o ultimo elemento
-        }
-        
-        // Isola o elemento recém removido
-        p->pAnte = NULL;
-        p->pProx = NULL;
+    // Anexar
+    pEsquerda->pProx = pDireita;
+
+    // Verifica se Ã© o Ãºltimo elemento, pra evitar NULL
+    if(pDireita != NULL) {
+        pDireita->pAnte = pEsquerda;
     }
+    else {
+        pInicio->pAnte = pEsquerda; // Atualizo o ponteiro para o ultimo elemento
+    }
+    
+    // Isola o elemento recÃ©m removido
+    p->pAnte = NULL;
+    p->pProx = NULL;
 
     return p;
 }
