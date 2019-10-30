@@ -3,17 +3,17 @@
 #include <string.h>
 
 // Autor: Bruno Monteiro
-// Objetivo: Lista encadeada com elemento cabeça
+// Objetivo: Lista encadeada com elemento cabeÃ§a
 
 // Tipo do Elemento
 typedef struct sElemento {
     int id;                     // ID
 	char nome[30];              // Nome
-	struct sElemento* pProx;    // Ponteiro para próximo elemento
+	struct sElemento* pProx;    // Ponteiro para prÃ³ximo elemento
 } tElemento;
 
 
-// Assinaturas das funções:
+// Assinaturas das funÃ§Ãµes:
 tElemento* inicializarLista();
 void inserirInicio(tElemento* pInicio, char* nome);
 int percorrer(tElemento* pInicio);
@@ -27,7 +27,7 @@ tElemento* remover(tElemento* pInicio, int id);
 
 tElemento* inicializarLista()
 {
-	// Aloca espaço para elemento CABEÇA
+	// Aloca espaÃ§o para elemento CABEÃ‡A
     tElemento* p = (tElemento*) calloc( 1, sizeof(tElemento) );
     
 	// Inicializa campos do elemento
@@ -43,14 +43,14 @@ tElemento* inicializarLista()
 
 void inserirInicio(tElemento* pInicio, char* nome)
 {
-	// Aloca espaço para elemento NOVO
+	// Aloca espaÃ§o para elemento NOVO
 	tElemento* pNovo = (tElemento*) calloc( 1, sizeof(tElemento) );
 	// Inicializa campos do elemento
 	strcpy(pNovo->nome, nome);
     pNovo->id = pInicio->id;
 	pNovo->pProx = NULL; 
     
-	// Atualiza elemento CABEÇA (incrementa o próximo valor do ID)
+	// Atualiza elemento CABEÃ‡A (incrementa o prÃ³ximo valor do ID)
     pInicio->id = pInicio->id + 1; 
 
 	// Anexa elemento NOVO (cuidado com a ordem! Dica: comece atribuindo os campos NULL)
@@ -62,11 +62,11 @@ void inserirInicio(tElemento* pInicio, char* nome)
 
 int percorrer(tElemento* pInicio)
 {
-	// Inicializações
+	// InicializaÃ§Ãµes
     int i = 0;						// Quantidade de elementos
-    tElemento* p = pInicio->pProx; 	// Ponteiro temporario. Pulo o elemento cabeça.
+    tElemento* p = pInicio->pProx; 	// Ponteiro temporario. Pulo o elemento cabeÃ§a.
 
-	// Verifico se Lista é vazia
+	// Verifico se Lista Ã© vazia
 	if(p == NULL) {
 		printf("OPS! LISTA VAZIA!!! \n");
 		return 0;
@@ -87,16 +87,16 @@ int percorrer(tElemento* pInicio)
 	}
 
 	printf("Quantidade de Elementos = %d \n", i);
-    return i; // Bônus: retorna a quantidade de elementos da lista
+    return i; // BÃ´nus: retorna a quantidade de elementos da lista
 }
 
 
 tElemento* buscar(tElemento* pInicio, int id)
 {
-	// Inicializações
-    tElemento* p = pInicio->pProx; 	// Ponteiro temporario. Pulo a cabeça da lista. 
+	// InicializaÃ§Ãµes
+    tElemento* p = pInicio->pProx; 	// Ponteiro temporario. Pulo a cabeÃ§a da lista. 
 
-    while (p != NULL) 	// verifica se já chegou no final da lista
+    while (p != NULL) 	// verifica se jÃ¡ chegou no final da lista
     {
         if (p->id == id) {
            return p;
@@ -111,14 +111,14 @@ tElemento* buscar(tElemento* pInicio, int id)
 
 void inserirFim(tElemento* pInicio, char* nome)
 {
-	// Aloca espaço para elemento NOVO
+	// Aloca espaÃ§o para elemento NOVO
 	tElemento* pNovo = (tElemento*) calloc(1, sizeof(tElemento) );
 	// Inicializa campos do elemento
 	strcpy(pNovo->nome, nome);
     pNovo->id = pInicio->id;
     pNovo->pProx = NULL; 
 
-    // Atualiza elemento CABEÇA (incrementa o próximo valor do ID)
+    // Atualiza elemento CABEÃ‡A (incrementa o prÃ³ximo valor do ID)
     pInicio->id = pInicio->id + 1;
 
 	// Percorre ate o ultimo elemento
@@ -135,8 +135,8 @@ void inserirFim(tElemento* pInicio, char* nome)
 
 void inserirDepoisDe(tElemento* pInicio, char* nome, int idCriterio)
 {
-    // Antecessor
-    tElemento* p = buscar(pInicio, idCriterio);
+	// Antecessor
+	tElemento* p = buscar(pInicio, idCriterio);
 
 	if(p == NULL)  // Verifica se o criterio existe
 	{
@@ -144,17 +144,17 @@ void inserirDepoisDe(tElemento* pInicio, char* nome, int idCriterio)
 	}
 	else
 	{
-        // Aloca espaço para elemento NOVO
+        // Aloca espaÃ§o para elemento NOVO
     	tElemento* pNovo = (tElemento*) calloc( 1, sizeof(tElemento) );
     	// Inicializa campos do elemento
     	strcpy(pNovo->nome, nome);
         pNovo->id = pInicio->id;
         pNovo->pProx = NULL;
     
-        // Atualiza elemento CABEÇA (incrementa o próximo valor do ID)
+        // Atualiza elemento CABEÃ‡A (incrementa o prÃ³ximo valor do ID)
         pInicio->id = pInicio->id + 1;
 
-		// Anexa elemento NOVO (dica: comece atribuindo os campos NULL)
+	// Anexa elemento NOVO (dica: comece atribuindo os campos NULL)
     	pNovo->pProx = p->pProx;
     	p->pProx = pNovo;
 	}
@@ -163,27 +163,23 @@ void inserirDepoisDe(tElemento* pInicio, char* nome, int idCriterio)
 
 tElemento* buscarAnterior(tElemento* pInicio, int id)
 {
-	// Inicializações
-    tElemento* p 	  = pInicio; 	// Ponteiro temporario. NÃO ignoro o elemento inicial!
+	// InicializaÃ§Ãµes
+	tElemento* p 	  = pInicio; 	// Ponteiro temporario. NÃƒO ignoro o elemento inicial!
 	tElemento* result = NULL;
 
-	if(pInicio->pProx == NULL) 	// Verifica se lista é vazia
+	if(pInicio->pProx == NULL) 	// Verifica se lista Ã© vazia
 	{
-		result = NULL;
+		return NULL;
 	}	
-	else
-	{
-        result = pInicio;
 
-		while (p != NULL)
+	while (p != NULL)
     	{
 	        if (p->id == id) {
 	           return result;
 	        }
 
-			result = p;		// Armazena o ponteiro anterior
+		result = p;		// Armazena o ponteiro anterior
         	p = p->pProx;
-    	}
 	}
 
     return NULL;
@@ -192,7 +188,7 @@ tElemento* buscarAnterior(tElemento* pInicio, int id)
 
 tElemento* remover(tElemento* pInicio, int id)
 {
-	// Inicializações
+	// InicializaÃ§Ãµes
     tElemento* anterior = buscarAnterior(pInicio, id);
     tElemento* p = NULL;
     
@@ -201,14 +197,12 @@ tElemento* remover(tElemento* pInicio, int id)
     	printf("anterior NULL. Nao existe elemento com esse id \n");
     	return NULL;
     }
-    else
-    {
-    	p = anterior->pProx;
+	
+	p = anterior->pProx;
     	
-        anterior->pProx = p->pProx;
-        p->pProx = NULL;
-        // OBS: se quiser remover sem retornar, usar free() para liberar memória
-    }
+	anterior->pProx = p->pProx;
+	p->pProx = NULL;
+	// OBS: se quiser remover sem retornar, usar free() para liberar memÃ³ria
 	
 	return p;
 }
@@ -220,7 +214,7 @@ int main()
 	int opcao, id;
 	char nome[30];
 	
-    // Primeiro elemento da lista (CABEÇA)
+    // Primeiro elemento da lista (CABEÃ‡A)
     tElemento* pInicio = inicializarLista();
 
     do 
