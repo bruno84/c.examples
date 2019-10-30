@@ -9,11 +9,11 @@
 typedef struct sElemento {
     int id;                     // ID
 	char nome[30];              // Nome
-	struct sElemento* pProx;    // Ponteiro para próximo elemento
+	struct sElemento* pProx;    // Ponteiro para proximo elemento
 } tElemento;
 
 
-// Assinaturas das funções:
+// Assinaturas das funcoes:
 tElemento* inicializarLista();
 void inserirInicio(tElemento* pInicio, char* nome);
 int percorrer(tElemento* pInicio);
@@ -27,15 +27,15 @@ tElemento* remover(tElemento* pInicio, int id);
 
 tElemento* inicializarLista()
 {
-	// Aloca espaço para elemento CABEÇA
-    tElemento* p = (tElemento*) calloc( 1, sizeof(tElemento) );
+	// Aloca espaco para elemento CABECA
+    tElemento* pNovo = (tElemento*) calloc( 1, sizeof(tElemento) );
     
 	// Inicializa campos do elemento
-	strcpy(p->nome, "");
-	p->id = 1;
-    p->pProx = NULL;
+	strcpy(pNovo->nome, "");
+	pNovo->id = 1;
+    pNovo->pProx = NULL;
 
-    return p;
+    return pNovo;
 }
 
 
@@ -93,7 +93,7 @@ int percorrer(tElemento* pInicio)
 
 tElemento* buscar(tElemento* pInicio, int id)
 {
-	// Inicializações
+	// Inicializacoes
     tElemento* p = pInicio->pProx; 	// Ponteiro temporario. Pulo a cabeça da lista. 
 
     while (p != NULL) 	// verifica se já chegou no final da lista
@@ -173,13 +173,13 @@ tElemento* buscarAnterior(tElemento* pInicio, int id)
 	}	
 
 	while (p != NULL)
-    	{
-	        if (p->id == id) {
-	           return result;
-	        }
-
+	{
 		result = p;		// Armazena o ponteiro anterior
-        	p = p->pProx;
+		p = p->pProx;
+		
+        if (p->id == id) {
+           return result;
+        }
 	}
 
     return NULL;
@@ -214,7 +214,7 @@ int main()
 	int opcao, id;
 	char nome[30];
 	
-    // Primeiro elemento da lista (CABEÇA)
+    // Primeiro elemento da lista (CABECA)
     tElemento* pInicio = inicializarLista();
 
     do 
