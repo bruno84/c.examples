@@ -3,62 +3,43 @@
 #include <string.h>
 
 // Autor: Bruno Monteiro
-// Objetivo: Lista sem elemento cabeça
+// Objetivo: Lista sem elemento cabeÃ§a
 
-// Tipo do Elemento
-typedef struct sElemento
-{
+// Tipo contendo os dado
+typedef struct {
     int id;                     // ID
 	char nome[30];              // Nome
-	struct sElemento* pProx;    // Ponteiro para próximo elemento
-    
+} tDado;
+
+// Tipo do Elemento
+typedef struct sElemento {
+	tDado dado;
+	struct sElemento* pProx;    // Ponteiro para prÃ³ximo elemento
 } tElemento;
 
 
-// Assinaturas das funções:
-int getProxID(tElemento* pInicio);
-void inserirInicio(tElemento** ppInicio, char* nome);
-int percorrer(tElemento* pInicio);
-tElemento* buscar(tElemento* pInicio, int id);
-void inserirFim(tElemento** ppInicio, char* nome);
-void inserirDepoisDe(tElemento* pInicio, char* nome, int id);
-tElemento* buscarAnterior(tElemento* pInicio, int id);
-tElemento* remover(tElemento** ppInicio, int id);
+// Assinaturas das funÃ§Ãµes:
+void inserirInicio(tElemento**, tDado);
+int percorrer(tElemento*);
+tElemento* buscar(tElemento*, int);
+void inserirFim(tElemento**, tDado);
+void inserirDepoisDe(tElemento* pInicio, tDado, int);
+tElemento* buscarAnterior(tElemento*, int);
+tDado remover(tElemento**, int);
 
 
-// OBS: percebam que o ideal seria ter um arquivo que pudesse ser usado para 
-// persistir um SERIAL (incremental) com o ID que deveria ser usado
-int getProxID(tElemento* pInicio)
-{
-    int maior = 0; 			// Suponho que o primeiro ID será 1
-    tElemento* p = NULL; 	// ponteiro temporario
-	
-	p = pInicio;
 
-    while( p != NULL )
-    {
-        if( p->id > maior  ) {
-            maior = p->id;
-        }
-
-        p = p->pProx;
-    }
-
-    return (maior + 1);
-}
-
-
-void inserirInicio(tElemento** ppInicio, char* nome)
+void inserirInicio(tElemento** ppInicio, tDado dado)
 {
     // NovoElemento    
     tElemento* pNovo = (tElemento*) calloc( 1, sizeof(tElemento) ); 
-    pNovo->id = getProxID(*ppInicio);
-    strcpy( pNovo->nome, nome);
+    pNovo->dado = dado;
+    pNovo->dado.id = time(NULL);
     pNovo->pProx = NULL;
 
-    if( *ppInicio == NULL ) // Verifica se a lista está vazia
+    if( *ppInicio == NULL ) // Verifica se a lista estÃ¡ vazia
     {
-    	// NovoElemento será o primeiro elemento da Lista
+    	// NovoElemento serÃ¡ o primeiro elemento da Lista
         *ppInicio = pNovo;
     }
     else
@@ -87,8 +68,8 @@ int percorrer(tElemento* pInicio)
             printf("i : %d \n", i);
             printf("Ponteiro: %d \n", p);
             printf("Ponteiro Proximo: %d \n", p->pProx);
-            printf("ID: %d \n", p->id);
-            printf("Nome: %s \n", p->nome);
+            printf("ID: %d \n", p->dado.id);
+            printf("Nome: %s \n", p->dado.nome);
             printf("\n");
             p = p->pProx;
         }
@@ -99,19 +80,19 @@ int percorrer(tElemento* pInicio)
 }
 
 
-void inserirFim(tElemento** ppInicio, char* nome)
+void inserirFim(tElemento** ppInicio, tDado dado)
 {
     tElemento *p = *ppInicio;
 	
     // Novo elemento    
     tElemento* pNovo = (tElemento*) calloc( 1, sizeof(tElemento) );    
-    pNovo->id = getProxID(*ppInicio);
-    strcpy( pNovo->nome, nome);
+    pNovo->dado = dado;
+    pNovo->dado.id = time(NULL);
     pNovo->pProx = NULL;
 
-    // verifica se lista está vazia
+    // verifica se lista estÃ¡ vazia
     if( *ppInicio == NULL ) { 
-        *ppInicio = pNovo;       	    // NovoElemento será o primeiro elemento da Lista
+        *ppInicio = pNovo;       	    // NovoElemento serÃ¡ o primeiro elemento da Lista
     }
     else
     {
@@ -131,7 +112,7 @@ tElemento* buscar(tElemento* pInicio, int id)
 
     while( p != NULL )
     {
-        if( p->id == id ) {
+        if( p->dado.id == id ) {
             return p;
         }
         p = p->pProx;
@@ -141,10 +122,10 @@ tElemento* buscar(tElemento* pInicio, int id)
 }
 
 
-void inserirDepoisDe(tElemento* pInicio, char* nome, int id)
+void inserirDepoisDe(tElemento* pInicio, tDado dado, int idCrit)
 {
 	// Antecessor
-    tElemento* p = buscar(pInicio, id);
+    tElemento* p = buscar(pInicio, idCrit);
 
     if( p == NULL )	// Verifica se o criterio existe
     {
@@ -153,10 +134,9 @@ void inserirDepoisDe(tElemento* pInicio, char* nome, int id)
     else
     {
         // Novo elemento 
-        tElemento* pNovo = (tElemento*) calloc( 1, sizeof(tElemento) );
-        // Inicializa campos do elemento    
-        pNovo->id = getProxID(pInicio);
-        strcpy( pNovo->nome, nome);
+        tElemento* pNovo = (tElemento*) calloc( 1, sizeof(tElemento) );    
+    	pNovo->dado = dado;
+    	pNovo->dado.id = time(NULL);
         pNovo->pProx = NULL;
 
     	// Anexa (dicas: comece atribuindo os campos NULL)
@@ -173,56 +153,60 @@ tElemento* buscarAnterior(tElemento* pInicio, int id)
 
     while (p != NULL)
     {
-        if (p->id == id) {
+    	anterior = p;
+        p = p->pProx;
+        
+        if (p != NULL && p->dado.id == id) {
            return anterior;
         }
-
-		anterior = p;
-        p = p->pProx;
     }
     
     return NULL;
 }
 
 
-tElemento* remover(tElemento** ppInicio, int id)
+tDado remover(tElemento** ppInicio, int id)
 {	
 	tElemento* anterior = NULL;
 	tElemento* atual = NULL;
+	tDado dadoRetorno;
+	dadoRetorno.id = -1;
 
 	if( *ppInicio == NULL ) {
         printf("Lista Vazia!!! \n");
-        return NULL;
+        return dadoRetorno;
     }
-    else { 
-		anterior = buscarAnterior(*ppInicio, id); // NULL: ID no 1o elemento OU não existe
 
-		if( anterior == NULL ) {
-			if( (*ppInicio)->id == id ) {    // Verifico se me refiro ao 1o elemento
-				atual = *ppInicio;
+	anterior = buscarAnterior(*ppInicio, id); // NULL: ID no 1o elemento OU nÃ£o existe
 
-				if( atual->pProx == NULL ) {
-					printf("Remove o primeiro e unico elemento \n");
-					*ppInicio = NULL;
-				}
-				else {
-	        		printf("Remove o primeiro elemento \n");
-        			*ppInicio = atual->pProx;
-                	atual->pProx = NULL;
-				}
+	if( anterior == NULL ) {
+		if( (*ppInicio)->dado.id == id ) {    // Verifico se me refiro ao 1o elemento
+			atual = *ppInicio;
+
+			if( atual->pProx == NULL ) {
+				printf("Remove o primeiro e unico elemento \n");
+				*ppInicio = NULL;
 			}
-    	}
-		else
-		{
-			atual = anterior->pProx;
-
-    		printf("Remove elemento meio ou ultimo \n");
-    		anterior->pProx = atual->pProx; 
-            atual->pProx = NULL;
+			else {
+        		printf("Remove o primeiro elemento \n");
+    			*ppInicio = atual->pProx;
+            	atual->pProx = NULL;
+			}
 		}
-    }
+	}
+	else
+	{
+		atual = anterior->pProx;
 
-	return atual;
+		printf("Remove elemento meio ou ultimo \n");
+		anterior->pProx = atual->pProx; 
+        atual->pProx = NULL;
+	}
+
+	dadoRetorno = atual->dado;
+	free(atual);
+	
+	return dadoRetorno;
 }
 
 
@@ -239,13 +223,12 @@ int main()
     {
      	printf("\n");
         printf("1-Percorrer \n");
-        printf("2-Buscar Maior ID \n");
-        printf("3-Buscar Elemento Atual \n");
-        printf("4-Buscar Elemento Anterior \n");
-        printf("5-Inserir no pInicio \n");
-        printf("6-Inserir no Fim \n");
-        printf("7-Inserir (depois de...) \n");
-        printf("8-Remover \n");
+        printf("2-Buscar Elemento Atual \n");
+        printf("3-Buscar Elemento Anterior \n");
+        printf("4-Inserir no pInicio \n");
+        printf("5-Inserir no Fim \n");
+        printf("6-Inserir (depois de...) \n");
+        printf("7-Remover \n");
         printf("0-Sair \n");
 
         printf("Qual sua opcao? ");
@@ -259,69 +242,62 @@ int main()
                     percorrer(pInicio);
                     break;
 
-    		case 2: printf("OBTER MAIOR ID \n");
-                    int maiorID = getProxID(pInicio);
-                    printf("Maior ID = %d \n", maiorID);
-                    break;
-
-			case 3: printf("BUSCAR ATUAL \n");
+			case 2: printf("BUSCAR ATUAL \n");
                     printf("Qual a matricula? ");
                     scanf("%d", &id);
                     tElemento *resultBusca = buscar(pInicio, id); 
                     if( resultBusca != NULL) {
                         printf("Ponteiro: %d \n", resultBusca);
-                        printf("Matricula: %d \n", resultBusca->id);
-                        printf("Nome: %s \n", resultBusca->nome);
+                        printf("Matricula: %d \n", resultBusca->dado.id);
+                        printf("Nome: %s \n", resultBusca->dado.nome);
                     }
                     else {
                         printf("NAO ACHOU \n");
                     }
                     break;
 
-			case 4: printf("BUSCAR ANTERIOR \n");
+			case 3: printf("BUSCAR ANTERIOR \n");
                     printf("Qual a matricula? ");
                     scanf("%d", &id);
                     resultBusca = buscarAnterior(pInicio, id); 
                     if( resultBusca != NULL) {
                         printf("Ponteiro: %d \n", resultBusca);
-                        printf("Matricula: %d \n", resultBusca->id);
-                        printf("Nome: %s \n", resultBusca->nome);
+                        printf("Matricula: %d \n", resultBusca->dado.id);
+                        printf("Nome: %s \n", resultBusca->dado.nome);
                     }
                     else {
                         printf("NAO ACHOU \n");
                     }
                     break;
 
-            case 5: printf("INSERIR no pInicio \n");
+            case 4: printf("INSERIR no pInicio \n");
                     printf("Digite o nome do novo Aluno: ");
-                    scanf("%s", &nome);
-                    inserirInicio(&pInicio, nome);
+                    tDado dado;
+                    scanf("%s", &dado.nome);
+                    inserirInicio(&pInicio, dado);
                     break;
             
-            case 6: printf("INSERIR no FIM \n");
+            case 5: printf("INSERIR no FIM \n");
                     printf("Digite o nome do novo Aluno: ");
-                    scanf("%s", &nome);
-                    inserirFim(&pInicio, nome);
+                    scanf("%s", &dado.nome);
+                    inserirFim(&pInicio, dado);
                     break;
 
-            case 7: printf("INSERIR (depois de ...) \n");
+            case 6: printf("INSERIR (depois de ...) \n");
 					printf("Qual o nome do novo Aluno? ");
-                    scanf("%s", &nome);
+                    scanf("%s", &dado.nome);
                     printf("Inserir depois de qual chave? ");
                     scanf("%d", &id);
-                    inserirDepoisDe(pInicio, nome, id);
+                    inserirDepoisDe(pInicio, dado, id);
                     break;
 
-            case 8: printf("REMOVER \n");
+            case 7: printf("REMOVER \n");
 					printf("Qual a chave a ser removida? ");
                     scanf("%d", &id);
-                    tElemento* resultRemocao = remover(&pInicio, id); 
-                    printf("resultRemocao = %d \n", resultRemocao);
-                    if(resultRemocao != NULL) {
-	        			printf("Matr: %d\n",  resultRemocao->id);
-	        			printf("Nome: %s\n",  resultRemocao->nome);
-	        			printf("pProx: %d\n", resultRemocao->pProx);
-                        free(resultRemocao);
+                    tDado resultRemocao = remover(&pInicio, id); 
+                    if(resultRemocao.id != -1) {
+	        			printf("Matr: %d\n",  resultRemocao.id);
+	        			printf("Nome: %s\n",  resultRemocao.nome);
                     }
                     else {
 						printf("Nenhum elemento encontrado \n");
