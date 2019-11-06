@@ -3,18 +3,20 @@
 #include <string.h>
 
 // Autor: Bruno Monteiro
-// Objetivo: Lista com elemento cabeça que aponta para fim da lista.
+// Objetivo: Lista com elemento cabeÃ§a que aponta para fim da lista.
 
 // Tipo do Elemento
-typedef struct sElemento
-{
+typedef struct {
     int id;                     // ID
 	char nome[30];              // Nome
-	struct sElemento* pProx;    // Ponteiro para próximo elemento
+} tDado;
+
+typedef struct sElemento {
+	tDado dado;
+	struct sElemento* pProx;    // Ponteiro para prÃ³ximo elemento
 } tElemento;
 
-typedef struct sLista
-{
+typedef struct sLista {
     int seq;          		// prox ID
     int tam;			   	// Qtd de elementos
 	tElemento* pInicio;    	// Ponteiro para inicio
@@ -22,20 +24,20 @@ typedef struct sLista
 } tLista;
 
 
-// Assinaturas das funções:
+// Assinaturas das funÃ§Ãµes:
 tLista* inicializarLista();
-void inserirInicio(tLista* pLista, char* nome);
-int percorrer(tLista* pLista);
-tElemento* buscar(tLista* pLista, int id);
-void inserirFim(tLista* pLista, char* nome);
-void inserirDepoisDe(tLista* pLista, char* nome, int id);
-tElemento* buscarAnterior(tLista* pLista, int id);
-tElemento* remover(tLista* pLista, int id);
+void inserirInicio(tLista*, tDado);
+int percorrer(tLista*);
+tElemento* buscar(tLista*, int id);
+void inserirFim(tLista*, tDado);
+void inserirDepoisDe(tLista*, tDado, int);
+tElemento* buscarAnterior(tLista*, int);
+tDado remover(tLista*, int);
 
 
 tLista* inicializarLista()
 {
-	// Aloca espaço para elemento CABEÇA
+	// Aloca espaÃ§o para elemento CABEÃ‡A
     tLista* pLista = (tLista*) calloc(1, sizeof(tLista));
 	// Inicializa campos do elemento
 	pLista->seq = 1;
@@ -47,16 +49,16 @@ tLista* inicializarLista()
 }
 
 
-void inserirInicio(tLista* pLista, char* nome)
+void inserirInicio(tLista* pLista, tDado dado)
 {
-	// Aloca espaço para elemento NOVO
+	// Aloca espaÃ§o para elemento NOVO
 	tElemento* pNovo = (tElemento*) calloc(1, sizeof(tElemento));
 	// Inicializa campos do elemento
-	strcpy(pNovo->nome, nome);
-    pNovo->id = pLista->seq;
+	pNovo->dado = dado;
+    pNovo->dado.id = pLista->seq;
 	pNovo->pProx = NULL; 
     
-	// Atualiza elemento CABEÇA
+	// Atualiza elemento CABEÃ‡A
     pLista->seq = pLista->seq + 1; 
 	pLista->tam = pLista->tam + 1; 
 
@@ -69,7 +71,7 @@ void inserirInicio(tLista* pLista, char* nome)
 
 int percorrer(tLista* pLista)
 {
-	// Inicializações
+	// InicializaÃ§Ãµes
     int i = 0;				// Quantidade de elementos
     tElemento* p = NULL;
 
@@ -101,27 +103,27 @@ int percorrer(tLista* pLista)
         i++;
         printf("i: %d\n", i);
 		printf("p: %d \n", p);
-        printf("ID: %d\n", p->id);
-        printf("Nome: %s\n", p->nome);
+        printf("ID: %d\n", p->dado.id);
+        printf("Nome: %s\n", p->dado.nome);
         printf("pProx: %d\n", p->pProx);
         printf("\n");
         p = p->pProx;
 	}
 
 	printf("Quantidade de Elementos = %d \n", i);
-    return i; // Bônus: retorna a quantidade de elementos da lista
+    return i; // BÃ´nus: retorna a quantidade de elementos da lista
 }
 
 
 tElemento* buscar(tLista* pLista, int id)
 {
-	// Inicializações
-    tElemento* p = pLista->pInicio; 	// Ponteiro temporario. Pulo a cabeça da lista. 
-    tElemento* result = NULL;		// Ponteiro que retornará o elemento encontrado.
+	// InicializaÃ§Ãµes
+    tElemento* p = pLista->pInicio; 	// Ponteiro temporario. Pulo a cabeÃ§a da lista. 
+    tElemento* result = NULL;		// Ponteiro que retornarÃ¡ o elemento encontrado.
 
-    while (p != NULL) 	// verifica se já chegou no final da lista
+    while (p != NULL) 	// verifica se jÃ¡ chegou no final da lista
     {
-        if (p->id == id)
+        if (p->dado.id == id)
         {
            result = p;
            break;
@@ -134,16 +136,16 @@ tElemento* buscar(tLista* pLista, int id)
 }
 
 
-void inserirFim(tLista* pLista, char* nome)
+void inserirFim(tLista* pLista, tDado dado)
 {
-	// Aloca espaço para elemento NOVO
+	// Aloca espaÃ§o para elemento NOVO
 	tElemento* pNovo = (tElemento*) malloc(sizeof(tElemento));
 	// Inicializa campos do elemento
-	strcpy(pNovo->nome, nome);
-    pNovo->id = pLista->seq;
+	pNovo->dado = dado;
+    pNovo->dado.id = pLista->seq;
     pNovo->pProx = NULL; 
 
-	// Atualiza elemento CABEÇA
+	// Atualiza elemento CABEÃ‡A
     pLista->seq = pLista->seq + 1; 
 	pLista->tam = pLista->tam + 1; 
 
@@ -153,21 +155,21 @@ void inserirFim(tLista* pLista, char* nome)
     // Anexa elemento NOVO
     p->pProx = pNovo;
     
-    // Atualiza elemento CABEÇA
+    // Atualiza elemento CABEÃ‡A
     pLista->pFim = pNovo;
 }
 
 
-void inserirDepoisDe(tLista* pLista, char* nome, int idCriterio)
+void inserirDepoisDe(tLista* pLista, tDado dado, int idCriterio)
 {
-	// Aloca espaço para elemento NOVO
+	// Aloca espaÃ§o para elemento NOVO
 	tElemento* pNovo = (tElemento*) malloc(sizeof(tElemento));
 	// Inicializa campos do elemento
-	strcpy(pNovo->nome, nome);
-    pNovo->id = pLista->seq;
+	pNovo->dado = dado;
+    pNovo->dado.id = pLista->seq;
     pNovo->pProx = NULL;
 
-	// Atualiza elemento CABEÇA
+	// Atualiza elemento CABEÃ‡A
     pLista->seq = pLista->seq + 1; 
 	pLista->tam = pLista->tam + 1; 
 
@@ -184,7 +186,7 @@ void inserirDepoisDe(tLista* pLista, char* nome, int idCriterio)
     	pNovo->pProx = p->pProx;
     	p->pProx = pNovo;
     	
-    	// Atualiza elemento CABEÇA
+    	// Atualiza elemento CABEÃ‡A
 		pLista->tam = pLista->tam + 1;
 		 
 		if(pNovo->pProx == NULL) {
@@ -194,34 +196,39 @@ void inserirDepoisDe(tLista* pLista, char* nome, int idCriterio)
 }
 
 
-tElemento* remover(tLista* pLista, int id)
+tDado remover(tLista* pLista, int id)
 {
 	tElemento* anterior = NULL;
     tElemento* p = NULL;
+    tDado dadoRetorno;
+    dadoRetorno.id = -1;
     
-    // Verifica se lista é vazia
+    // Verifica se lista Ã© vazia
 	if(pLista->pInicio == NULL) {  	
-		return NULL;
+		return dadoRetorno;
 	}
     
     // Remover primeiro elemento
     p = pLista->pInicio;
     
-    if(p->id == id) 
+    if(p->dado.id == id) 
 	{	
 		p = pLista->pInicio;
     		    	
         pLista->pInicio = p->pProx;
         p->pProx = NULL;
         
-        // Atualiza elemento CABEÇA
+        // Atualiza elemento CABEÃ‡A
 		pLista->tam = pLista->tam - 1;
 		 
 		if(pLista->pInicio == NULL) {
 			pLista->pFim = NULL;
 		}
         
-        return p; // OBS: se quiser remover sem retornar, usar free() para liberar memória
+        dadoRetorno = p->dado;
+        free(p);
+        
+        return dadoRetorno;
 	}
 	
 	// Procura anterior (nao primeiro)
@@ -229,7 +236,7 @@ tElemento* remover(tLista* pLista, int id)
 	
 	while (p != NULL)
 	{
-        if (p->id == id) {
+        if (p->dado.id == id) {
            break;
         }
 
@@ -241,7 +248,7 @@ tElemento* remover(tLista* pLista, int id)
 	if(anterior == NULL) 
 	{
     	printf("Nao encontrou elemento pra remover! \n");
-    	return NULL;
+    	return dadoRetorno;
     }
     else
     {		
@@ -250,14 +257,17 @@ tElemento* remover(tLista* pLista, int id)
         anterior->pProx = p->pProx;
         p->pProx = NULL;
         
-        // Atualiza elemento CABEÇA
+        // Atualiza elemento CABEÃ‡A
 		pLista->tam = pLista->tam - 1;
 		
 		if(pLista->pFim == p) {
 			pLista->pFim = anterior;
 		}
         
-        return p;  // OBS: se quiser remover sem retornar, usar free() para liberar memória
+        dadoRetorno = p->dado;
+        free(p);
+        
+        return dadoRetorno;
     }
 }
 
@@ -265,10 +275,11 @@ tElemento* remover(tLista* pLista, int id)
 int main()
 {
     int opcao;
-    int id;
-    char nome[30];
+    int id, idCrit;
+    tElemento* pResult = NULL;
+	tDado dadoEntrada, dadoRetorno;
 
-    // Primeiro elemento da lista (CABEÇA)
+    // Primeiro elemento da lista (CABEÃ‡A)
     tLista* pLista = inicializarLista();
 
     do 
@@ -295,13 +306,12 @@ int main()
 			case 2: printf("BUSCAR NORMAL \n");
 					printf("Qual a chave? ");
                     scanf("%d", &id);
-                    tElemento* result = NULL;
-                    result = buscar(pLista, id);
-                    printf("result = %d \n", result);
-                    if(result != NULL) {
-	        			printf("ID: %d\n", result->id);
-	        			printf("Nome: %s\n", result->nome);
-	        			printf("pProx: %d\n", result->pProx);
+                    pResult = buscar(pLista, id);
+                    printf("pResult = %d \n", pResult);
+                    if(pResult != NULL) {
+	        			printf("ID: %d\n", pResult->dado.id);
+	        			printf("Nome: %s\n", pResult->dado.nome);
+	        			printf("pProx: %d\n", pResult->pProx);
                     }
                     else {
 						printf("Nenhum elemento encontrado \n");
@@ -310,35 +320,31 @@ int main()
 
             case 3: printf("INSERIR INICIO \n");
 					printf("Qual o nome do aluno? ");
-                    scanf("%s", &nome);
-                    inserirInicio(pLista, nome);
+                    scanf("%s", &dadoEntrada.nome);
+                    inserirInicio(pLista, dadoEntrada);
                     break;
 
             case 4: printf("INSERIR FIM \n");
 					printf("Qual o nome? ");
-                    scanf("%s", &nome);
-                    inserirFim(pLista, nome);
+                    scanf("%s", &dadoEntrada.nome);
+                    inserirFim(pLista, dadoEntrada);
                     break;
 
             case 5: printf("INSERIR DEPOIS DE... \n");
-					printf("Qual o nome? ");
-                    scanf("%s", &nome);
                     printf("Inserir depois de qual chave? ");
-                    scanf("%d", &id);
-                    inserirDepoisDe(pLista, nome, id);
+                    scanf("%d", &idCrit);
+					printf("Qual o nome? ");
+                    scanf("%s", &dadoEntrada.nome);
+                    inserirDepoisDe(pLista, dadoEntrada, idCrit);
                     break;
 
             case 6: printf("REMOVER \n");
 					printf("Qual o ID? ");
                     scanf("%d", &id);
-                    tElemento* resultRemove = NULL;
-                    resultRemove = remover(pLista, id);
-                    printf("result = %d \n", result);
-                    if(resultRemove != NULL) {
-	        			printf("ID: %d\n", resultRemove->id);
-	        			printf("Nome: %s\n", resultRemove->nome);
-	        			printf("pProx: %d\n", resultRemove->pProx);
-                        free(resultRemove);
+                    dadoRetorno = remover(pLista, id);
+                    if(dadoRetorno.id != -1) {
+	        			printf("ID: %d\n", dadoRetorno.id);
+	        			printf("Nome: %s\n", dadoRetorno.nome);
                     }
                     else {
 						printf("Nenhum elemento encontrado \n");
