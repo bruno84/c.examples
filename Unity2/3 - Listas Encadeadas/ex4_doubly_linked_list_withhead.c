@@ -239,8 +239,7 @@ int main()
 
     int op, id, idCrit;
     tElemento *pResult;
-    tDado dadoEntrada;
-    tDado dadoRetorno;
+    tDado dadoEntrada, dadoRetorno;
 
     do
     {
